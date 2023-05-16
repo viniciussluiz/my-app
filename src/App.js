@@ -4,22 +4,29 @@ import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 
 
-
-
 function App() {
   const [users, setUsers] = useState([]);
+  const [blood_types, setBloodTypes] = useState([]);
 
   const getDataApi = async () => {
-    const url = "https://random-data-api.com/api/v2/users?size=15&is_xml=true";
-    await axios.get(url)
+    const url_users = "https://random-data-api.com/api/v2/users?size=15&is_xml=true";
+    const url_blood_types = "https://random-data-api.com/api/v2/blood_types"
+    await axios.get(url_users)
       .then(function (response) {
-        console.log("deu certo");
         setUsers(response.data);
       })
       .catch(function (error) {
         console.log(error);
       });
+      await axios.get(url_blood_types)
+      .then(function (response) {
+        setBloodTypes(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
+
 
   useEffect(() => {
     getDataApi();
@@ -28,6 +35,10 @@ function App() {
   useEffect(() => {
     console.log(users);
   }, [users]);
+
+  useEffect(() => {
+    console.log(blood_types);
+  }, [blood_types]);
 
   return (
     <>
@@ -58,6 +69,7 @@ function App() {
               <th>Subscription Status</th>
               <th>Payment Method</th>
               <th>Subscription Term</th>
+              <th>Blood Type</th>
             </tr>
           </thead>
           <tbody>
