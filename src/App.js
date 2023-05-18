@@ -8,6 +8,14 @@ function App() {
   const [users, setUsers] = useState([]);
   const [searchUsers, setSearchUsers] = useState([]);
 
+  const handleSearchUsers = (e) => {
+    setSearchUsers(e.target.value);
+  };
+
+  const filteredUsers = users.filter((user) => 
+  user.first_name.toLowerCase().includes(searchUsers)
+  );
+
   const getDataApi = async () => {
     const url_users = "https://random-data-api.com/api/v2/users?size=15&is_xml=true";
     await axios.get(url_users)
@@ -27,14 +35,6 @@ function App() {
   useEffect(() => {
     console.log(users);
   }, [users]);
-
-  const handleSearchUsers = (e) => {
-    setSearchUsers(e.target.value);
-  };
-
-  const filteredUsers = users.filter((user) => 
-  user.first_name.toLowerCase().includes(searchUsers)
-  );
 
   return (
     <>
