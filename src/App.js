@@ -6,21 +6,13 @@ import Table from 'react-bootstrap/Table';
 
 function App() {
   const [users, setUsers] = useState([]);
-  const [blood_types, setBloodTypes] = useState([]);
+  const [searchUsers, setSearchUsers] = useState([]);
 
   const getDataApi = async () => {
     const url_users = "https://random-data-api.com/api/v2/users?size=15&is_xml=true";
-    const url_blood_types = "https://random-data-api.com/api/v2/blood_types"
     await axios.get(url_users)
       .then(function (response) {
         setUsers(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      await axios.get(url_blood_types)
-      .then(function (response) {
-        setBloodTypes(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -36,13 +28,24 @@ function App() {
     console.log(users);
   }, [users]);
 
-  useEffect(() => {
-    console.log(blood_types);
-  }, [blood_types]);
+  const handleSearchUsers = (e) => {
+    setSearchUsers(e.target.value);
+  };
+
+  const filteredUsers = users.filter((user) => 
+  user.first_name.toLowerCase().includes(searchUsers)
+  );
 
   return (
     <>
       <h1>Users Table</h1>
+      <input
+        type="text"
+        value={searchUsers}
+        onChange={handleSearchUsers}
+        placeholder="Pesquisar pelo primeiro nome"
+    />
+
       <div className="table-container">
       <Table className="table-bordered">
           <thead>
@@ -73,7 +76,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+          {filteredUsers.map((user) => (
               <tr key={user.id}>
                 <td>{user.first_name}</td>
                 <td>{user.last_name}</td>
